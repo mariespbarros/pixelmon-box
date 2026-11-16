@@ -1,0 +1,40 @@
+/* ---------- Ficha (detalhe) ---------- */
+.dex-detail{ overflow:auto; align-items:flex-start; }
+@media (min-height:640px){ .dex-detail{ align-items:center; } }
+.dd-info{ max-width:380px; }
+.dd-nick{ margin:-8px 0 12px; font-size:11px; color:#ff9fcf; }
+.dd-nick:empty{ display:none; }
+.dd-desc{ margin:0 0 16px; font-size:11px; line-height:1.8; color:#cfcadc; }
+.dd-bars{ display:grid; gap:6px; margin:0 0 18px; }
+.sbar{ display:grid; grid-template-columns:3.2em 2.6em 1fr; align-items:center; gap:8px; font-size:10px; }
+.sbar span{ color:var(--dim); } .sbar b{ font-weight:400; text-align:right; }
+.sbar i{ display:block; height:8px; background:#1d1a28; }
+.sbar u{ display:block; height:100%; background:linear-gradient(90deg, #7dffb0, #ffd34d); }
+.dd-label{ margin:0 0 8px; font-size:10px; color:var(--dim); letter-spacing:.12em; }
+.dd-evo{ margin-bottom:18px; }
+.evo-chain{ display:flex; align-items:center; gap:10px; }
+.evo-chain figure{ margin:0; width:96px; text-align:center; }
+.evo-chain img{ width:72px; height:72px; image-rendering:pixelated; display:block; margin:0 auto; }
+.evo-chain .q{ display:grid; place-items:center; width:72px; height:72px; margin:0 auto; background:#0d0c14; font:16px 'Press Start 2P', monospace; color:#2a2638; }
+.evo-chain figcaption{ font-size:9px; color:var(--dim); margin-top:4px; line-height:1.5; }
+.evo-chain .arr{ color:var(--gold); font:12px 'Press Start 2P', monospace; }
+.dd-nickform{ display:flex; gap:10px; margin:0 0 14px; }
+.dd-nickform input, .set-box textarea{
+  font:11px 'Silkscreen', ui-monospace, monospace; color:var(--fg); background:#000; border:0; padding:8px 10px; flex:1; min-width:0;
+  box-shadow:0 -2px 0 0 #2a2638, 0 2px 0 0 #2a2638, -2px 0 0 0 #2a2638, 2px 0 0 0 #2a2638; outline:none; }
+.dd-nickform input:focus, .set-box textarea:focus{ box-shadow:0 -2px 0 0 var(--gold), 0 2px 0 0 var(--gold), -2px 0 0 0 var(--gold), 2px 0 0 0 var(--gold); }
+.dd-actions{ gap:10px; }
+
+/* ---------- Conquistas ---------- */
+.dex-grid.ach-list{ grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); }
+.ach{ display:flex; gap:12px; align-items:flex-start; background:#0d0c14; padding:12px; opacity:.6; }
+.ach.ok{ opacity:1; background:#121019; }
+.ach-ic{ flex:none; width:36px; height:36px; display:grid; place-items:center; font:14px 'Press Start 2P', monospace; color:#3d3a4a;
+  box-shadow:0 -2px 0 0 #2a2638, 0 2px 0 0 #2a2638, -2px 0 0 0 #2a2638, 2px 0 0 0 #2a2638; }
+.ach.ok .ach-ic{ color:var(--gold); box-shadow:0 -2px 0 0 var(--gold), 0 2px 0 0 var(--gold), -2px 0 0 0 var(--gold), 2px 0 0 0 var(--gold); }
+.ach b{ font:400 10px 'Press Start 2P', monospace; display:block; margin:2px 0 6px; line-height:1.4; }
+.ach p{ margin:0 0 6px; font-size:10px; color:var(--dim); line-height:1.6; }
+.ach small{ font-size:9px; color:#5c5873; }
+.ach-bar{ display:block; height:4px; background:#1d1a28; margin-bottom:4px; }
+.ach-bar u{ display:block; height:100%; background:#7dffb0; }
+.dex-tools[hidden]{ display:none; }

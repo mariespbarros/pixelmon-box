@@ -1,0 +1,39 @@
+/* ---------- Compartilhar ---------- */
+.share-box{ width:min(420px, 100%); height:auto; max-height:92dvh; }
+.share-img{ flex:1; min-height:0; display:grid; place-items:center; margin-bottom:14px; }
+.share-img img{ max-width:100%; max-height:58dvh; image-rendering:pixelated; }
+.share-status{ margin:12px 0 0; font-size:10px; line-height:1.7; color:var(--dim); text-align:center; }
+
+/* ---------- Ajustes ---------- */
+.set-box{ width:min(520px, 100%); }
+.set-box .row .pxbtn.sm{ margin:3px; }
+.set-box .row.col .pxbtn{ align-self:flex-start; }
+.set-scroll{ overflow:auto; flex:1; padding-right:4px; }
+.set-box section{ margin-bottom:20px; }
+.set-box h3{ margin:0 0 10px; font:400 10px 'Press Start 2P', monospace; color:var(--gold); letter-spacing:.1em; }
+.set-box .row{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 0; font-size:11px; color:#cfcadc; }
+.set-box .row.col{ flex-direction:column; align-items:stretch; }
+.set-box textarea{ resize:none; font-size:10px; }
+.set-msg{ font-size:10px; color:#7dffb0; min-height:1em; margin:4px 0; line-height:1.6; }
+input[type=range]{ -webkit-appearance:none; appearance:none; width:150px; height:8px; background:#1d1a28; outline:none; }
+input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:14px; height:14px; background:var(--fg); cursor:pointer; }
+input[type=range]::-moz-range-thumb{ width:14px; height:14px; background:var(--fg); border:0; border-radius:0; cursor:pointer; }
+input[type=range]:focus-visible{ outline:2px dashed var(--gold); outline-offset:3px; }
+.tg{ -webkit-appearance:none; appearance:none; width:34px; height:16px; background:#1d1a28; position:relative; cursor:pointer; flex:none; }
+.tg::after{ content:""; position:absolute; top:3px; left:3px; width:10px; height:10px; background:#5c5873; transition:left .15s, background .15s; }
+.tg:checked{ background:#2a4a3a; } .tg:checked::after{ left:21px; background:#7dffb0; }
+.tg:focus-visible{ outline:2px dashed var(--gold); outline-offset:3px; }
+
+/* ---------- Tutorial ---------- */
+.tut-box{ width:min(460px, 100%); height:auto; text-align:center; padding:26px 24px 22px; }
+.tut-box h2{ margin:0 0 16px; font:400 13px 'Press Start 2P', monospace; color:var(--gold); }
+.tut-box p{ font-size:12px; line-height:1.9; color:#cfcadc; margin:0 0 22px; }
+.tut-dots{ font-size:10px !important; color:var(--dim) !important; letter-spacing:.4em; margin-bottom:16px !important; }
+
+.sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+@media (prefers-reduced-motion: reduce){
+  .hint, .badge, #ballBody.loading{ animation-duration:4s; }
+  #card.show .ri{ animation-duration:.01s; animation-delay:0s; }
+  #scene.ready{ transition-duration:.01s; }
+}

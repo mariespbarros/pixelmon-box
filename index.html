@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Pixelmon Box · uma cápsula 8-bit cheia de criaturas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://pokeapi.co">
+<link rel="preconnect" href="https://raw.githubusercontent.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/creature.css">
+<link rel="stylesheet" href="css/pokedex.css">
+<link rel="stylesheet" href="css/hud.css">
+<link rel="stylesheet" href="css/panels.css">
+<link rel="stylesheet" href="css/battle.css">
+<link rel="stylesheet" href="css/dialogs.css">
+</head>
+<body>
+
+<canvas id="stars" aria-hidden="true"></canvas>
+<div id="flash" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<header class="hud">
+  <div class="hud-l">
+    <p class="counter" style="margin:0">
+      Pokémon encontrados: <b id="count">0</b>
+      <span class="sh" id="shinyCount"></span>
+    </p>
+    <p class="hud-info" id="hudInfo"></p>
+  </div>
+  <div class="hud-r">
+    <button id="dexBtn" class="hudbtn" type="button" aria-haspopup="dialog" title="Pokédex (tecla P)">
+      <svg viewBox="0 0 10 10" aria-hidden="true"><rect x="0" y="0" width="4" height="4"/><rect x="6" y="0" width="4" height="4"/><rect x="0" y="6" width="4" height="4"/><rect x="6" y="6" width="4" height="4" opacity=".4"/></svg>
+      <span>pokédex</span>
+    </button>
+    <button id="battleBtn" class="hudbtn" type="button" aria-haspopup="dialog" title="Batalha (tecla B)">
+      <svg viewBox="0 0 10 10" aria-hidden="true"><rect x="7" y="0" width="3" height="1"/><rect x="6" y="1" width="2" height="1"/><rect x="5" y="2" width="2" height="1"/><rect x="4" y="3" width="2" height="1"/><rect x="3" y="4" width="2" height="1"/><rect x="1" y="5" width="3" height="1"/><rect x="2" y="6" width="1" height="2"/><rect x="0" y="8" width="2" height="2"/><rect x="3" y="6" width="2" height="1"/></svg>
+      <span>batalha</span>
+    </button>
+    <button id="musicBtn" class="hudbtn icon" type="button" aria-pressed="false" aria-label="Ligar música" title="Música">
+      <svg viewBox="0 0 10 10" aria-hidden="true"><rect x="3" y="0" width="7" height="1"/><rect x="3" y="1" width="1" height="6"/><rect x="9" y="1" width="1" height="5"/><rect x="1" y="6" width="3" height="3"/><rect x="7" y="5" width="3" height="3"/></svg>
+    </button>
+    <button id="mute" type="button" aria-pressed="false" aria-label="Silenciar sons"></button>
+    <button id="setBtn" class="hudbtn icon" type="button" aria-haspopup="dialog" aria-label="Ajustes" title="Ajustes">
+      <svg viewBox="0 0 10 10" aria-hidden="true"><rect x="4" y="0" width="2" height="2"/><rect x="4" y="8" width="2" height="2"/><rect x="0" y="4" width="2" height="2"/><rect x="8" y="4" width="2" height="2"/><rect x="2" y="2" width="6" height="6"/><rect x="1" y="1" width="2" height="2"/><rect x="7" y="1" width="2" height="2"/><rect x="1" y="7" width="2" height="2"/><rect x="7" y="7" width="2" height="2"/><rect x="4" y="4" width="2" height="2" fill="#000"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="scene">
+  <div id="mon" aria-hidden="true">
+    <div class="rays" id="rays"></div>
+    <div class="halo" id="halo"></div>
+    <div id="spriteBox">
+      <div id="spriteLive">
+        <img id="sprite" alt="" draggable="false">
+        <img id="spriteBlink" alt="" draggable="false" hidden>
+      </div>
+    </div>
+  </div>
+
+  <button id="ball" type="button" aria-label="Abrir Pokébola" aria-describedby="hint">
+    <div class="beam" id="beam"></div>
+    <div id="ballBody"><canvas id="ballCanvas" width="32" height="44"></canvas></div>
+    <canvas id="shadow" width="32" height="6"></canvas>
+  </button>
+
+  <section id="info">
+    <p class="hint" id="hint">clique para abrir</p>
+
+    <div id="card" hidden>
+      <h1 id="name" class="ri" style="--i:0"></h1>
+      <p id="dex" class="ri" style="--i:1"><span id="dexNum"></span><span class="rar" id="rar"></span><span class="badge" id="badge" hidden>✦ Shiny</span><span class="orig" id="orig"></span></p>
+      <ul class="types ri" id="types" style="--i:2"></ul>
+      <div class="card-actions ri" style="--i:3">
+        <button class="pxbtn" id="again" type="button">abrir outra</button>
+        <button class="pxbtn sm" id="cardSheet" type="button">ficha</button>
+        <button class="pxbtn sm" id="cardShare" type="button">compartilhar</button>
+      </div>
+    </div>
+
+    <div id="error" hidden>
+      <p id="errorMsg"></p>
+      <button class="pxbtn" id="retry" type="button">tentar de novo</button>
+    </div>
+  </section>
+</main>
+
+<nav class="ballbar" aria-label="Escolher bola">
+  <div id="ballBar" class="bb-row"></div>
+  <p class="bb-name" id="ballName"></p>
+</nav>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<!-- ===== Pokédex ===== -->
+<div id="dexPanel" class="dex" role="dialog" aria-modal="true" aria-labelledby="dexTitle" hidden>
+  <div class="dex-box">
+    <header class="dex-head">
+      <h2 id="dexTitle">Pokédex</h2>
+      <button class="dex-x" id="dexClose" type="button" aria-label="Fechar Pokédex">×</button>
+    </header>
+    <div class="dex-tabs" role="tablist">
+      <button role="tab" class="tab" data-tab="o" aria-selected="true" id="tabO">criaturas <b id="progO"></b></button>
+      <button role="tab" class="tab" data-tab="p" aria-selected="false" id="tabP">pokémon <b id="progP"></b></button>
+      <button role="tab" class="tab" data-tab="a" aria-selected="false" id="tabA">conquistas <b id="progA"></b></button>
+    </div>
+    <div class="dex-tools">
+      <div class="seg" role="group" aria-label="Filtro">
+        <button type="button" class="chip" data-filter="all" aria-pressed="true">todos</button>
+        <button type="button" class="chip" data-filter="found" aria-pressed="false">encontrados</button>
+        <button type="button" class="chip" data-filter="fav" aria-pressed="false">♥ favoritos</button>
+      </div>
+      <div class="pager">
+        <button type="button" class="chip" id="pgPrev" aria-label="Página anterior">◀</button>
+        <span id="pgLabel"></span>
+        <button type="button" class="chip" id="pgNext" aria-label="Próxima página">▶</button>
+      </div>
+    </div>
+    <div class="dex-bar" aria-hidden="true"><i id="dexBarFill"></i></div>
+    <div class="dex-grid" id="dexGrid"></div>
+    <p class="dex-empty" id="dexEmpty" hidden></p>
+
+    <div class="dex-detail" id="dexDetail" hidden>
+      <div class="dd-art"><img id="ddImg" alt=""></div>
+      <div class="dd-info">
+        <p class="dd-num" id="ddNum"></p>
+        <h3 id="ddName"></h3>
+        <p class="dd-nick" id="ddNick"></p>
+        <ul class="types" id="ddTypes"></ul>
+        <p class="dd-desc" id="ddDesc"></p>
+        <dl class="dd-stats" id="ddStats"></dl>
+        <div class="dd-bars" id="ddBars"></div>
+        <div class="dd-evo" id="ddEvo"></div>
+        <form class="dd-nickform" id="ddNickForm" hidden>
+          <input id="ddNickInput" maxlength="12" placeholder="novo apelido" aria-label="Apelido" autocomplete="off">
+          <button class="pxbtn sm" type="submit">salvar</button>
+        </form>
+        <div class="dd-actions">
+          <button type="button" class="pxbtn sm" id="ddCry">♪ grito</button>
+          <button type="button" class="pxbtn sm" id="ddFav" aria-pressed="false">♡ favoritar</button>
+          <button type="button" class="pxbtn sm" id="ddNickBtn">apelidar</button>
+          <button type="button" class="pxbtn sm" id="ddShare">compartilhar</button>
+          <button type="button" class="pxbtn sm" id="ddBattle">batalhar</button>
+          <button type="button" class="pxbtn sm" id="ddShiny" hidden>ver shiny</button>
+          <button type="button" class="pxbtn sm" id="ddBack">voltar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Batalha ===== -->
+<div id="battle" class="dex" role="dialog" aria-modal="true" aria-labelledby="bTitle" hidden>
+  <div class="dex-box battle-box">
+    <header class="dex-head">
+      <h2 id="bTitle">Batalha</h2>
+      <button class="dex-x" id="bClose" type="button" aria-label="Fechar batalha">×</button>
+    </header>
+    <div id="bPick">
+      <p class="b-hint">Escolha uma criatura da sua coleção para batalhar. Ao vencer, o oponente entra na sua Pokédex.</p>
+      <p class="dex-empty" id="bEmpty" hidden>Você ainda não tem criaturas. Abra a Pokébola primeiro!</p>
+      <div class="dex-grid b-list" id="bList"></div>
+    </div>
+    <div id="bArena" class="arena" hidden>
+      <div class="b-field">
+        <div class="b-info foe"><b id="bFoeName"></b><ul class="types mini" id="bFoeTypes"></ul><div class="hp"><i id="bFoeHp"></i></div><small id="bFoeHpTxt"></small></div>
+        <div class="b-slot foe" id="bFoeSlot"><div class="b-ground"></div><img id="bFoeImg" alt=""></div>
+        <div class="b-slot me" id="bMeSlot"><div class="b-ground"></div><img id="bMeImg" alt=""></div>
+        <div class="b-info me"><b id="bMeName"></b><ul class="types mini" id="bMeTypes"></ul><div class="hp"><i id="bMeHp"></i></div><small id="bMeHpTxt"></small></div>
+      </div>
+      <p class="b-log" id="bLog" aria-live="polite"></p>
+      <div class="b-moves" id="bMoves"></div>
+      <div class="b-end" id="bEnd" hidden>
+        <button type="button" class="pxbtn" id="bAgain">nova batalha</button>
+        <button type="button" class="pxbtn" id="bQuit">sair</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Compartilhar ===== -->
+<div id="shareModal" class="dex" role="dialog" aria-modal="true" aria-labelledby="shTitle" hidden>
+  <div class="dex-box share-box">
+    <header class="dex-head">
+      <h2 id="shTitle">Cartão</h2>
+      <button class="dex-x" id="shareClose" type="button" aria-label="Fechar">×</button>
+    </header>
+    <div class="share-img"><img id="shareImg" alt=""></div>
+    <div class="dd-actions" style="justify-content:center">
+      <button type="button" class="pxbtn sm" id="shareCopy">copiar imagem</button>
+      <button type="button" class="pxbtn sm" id="shareDl">baixar png</button>
+    </div>
+    <p class="share-status" id="shareStatus"></p>
+  </div>
+</div>
+
+<!-- ===== Ajustes ===== -->
+<div id="settingsPanel" class="dex" role="dialog" aria-modal="true" aria-labelledby="setTitle" hidden>
+  <div class="dex-box set-box">
+    <header class="dex-head">
+      <h2 id="setTitle">Ajustes</h2>
+      <button class="dex-x" id="setClose" type="button" aria-label="Fechar ajustes">×</button>
+    </header>
+    <div class="set-scroll">
+      <section><h3>Som</h3>
+        <label class="row">efeitos <input type="range" id="setSfx" min="0" max="100"></label>
+        <label class="row">música de fundo <input type="checkbox" id="setMusic" class="tg"></label>
+        <label class="row">volume da música <input type="range" id="setMusicVol" min="0" max="100"></label>
+      </section>
+      <section><h3>Visual</h3>
+        <div class="row">animações
+          <span class="seg"><button type="button" class="chip" data-motion="auto">auto</button><button type="button" class="chip" data-motion="full">todas</button><button type="button" class="chip" data-motion="reduce">reduzidas</button></span></div>
+        <div class="row">tamanho da bola
+          <span class="seg"><button type="button" class="chip" data-size="P">P</button><button type="button" class="chip" data-size="M">M</button><button type="button" class="chip" data-size="G">G</button></span></div>
+        <label class="row">clima (chuva, neve, vento) <input type="checkbox" id="setWeather" class="tg"></label>
+        <label class="row">cenários por tipo <input type="checkbox" id="setScenes" class="tg"></label>
+        <label class="row">dia e noite <input type="checkbox" id="setDaynight" class="tg"></label>
+      </section>
+      <section><h3>Coleção</h3>
+        <div class="row col"><button type="button" class="pxbtn sm" id="setExportBtn">exportar código</button>
+          <textarea id="setExport" readonly rows="2" aria-label="Código da coleção"></textarea></div>
+        <div class="row col"><textarea id="setImport" rows="2" placeholder="cole aqui um código PKB1:…" aria-label="Importar código"></textarea>
+          <button type="button" class="pxbtn sm" id="setImportBtn">importar</button></div>
+        <p class="set-msg" id="setMsg" aria-live="polite"></p>
+        <div class="row"><button type="button" class="pxbtn sm danger" id="setReset">apagar coleção</button>
+          <button type="button" class="pxbtn sm" id="setTut">ver tutorial</button></div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Tutorial ===== -->
+<div id="tutorial" class="dex" role="dialog" aria-modal="true" aria-labelledby="tutTitle" hidden>
+  <div class="dex-box tut-box">
+    <p class="tut-dots" id="tutDots" aria-hidden="true"></p>
+    <h2 id="tutTitle"></h2>
+    <p id="tutText"></p>
+    <div class="dd-actions" style="justify-content:center">
+      <button type="button" class="pxbtn sm" id="tutSkip">pular</button>
+      <button type="button" class="pxbtn" id="tutNext">próximo</button>
+    </div>
+  </div>
+</div>
+
+<p class="sr-only" id="live" aria-live="polite"></p>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

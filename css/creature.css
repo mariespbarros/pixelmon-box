@@ -1,0 +1,34 @@
+/* ---------- Sprite vivo / aura ---------- */
+#spriteBox{ position:absolute; inset:0; opacity:0; transform-origin:50% 88%; will-change:transform, filter, opacity; }
+#spriteLive{ position:absolute; inset:0; transform-origin:50% 92%; }
+#sprite, #spriteBlink{ opacity:1; }
+#spriteBlink{ position:absolute; inset:0; width:100%; height:100%; image-rendering:pixelated; visibility:hidden; }
+#spriteBlink.on{ visibility:visible; }
+#spriteBlink[hidden]{ display:none; }
+.rays{
+  position:absolute; left:50%; top:56%; width:170%; aspect-ratio:1; pointer-events:none;
+  transform:translate(-50%,-50%); opacity:0; overflow:hidden; border-radius:50%;
+  -webkit-mask:radial-gradient(circle, #000 0 18%, transparent 60%); mask:radial-gradient(circle, #000 0 18%, transparent 60%);
+}
+.rays::before{
+  content:""; position:absolute; inset:0;
+  background:repeating-conic-gradient(from 0deg, var(--ray, rgba(255,215,90,.32)) 0 7deg, transparent 7deg 24deg);
+  animation:spin 22s linear infinite;
+}
+.rays.epica{ --ray: rgba(194,125,255,.26); }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+body.legend #stars{ opacity:.18; }
+body.legend .hud{ opacity:.25; }
+#stars, .hud{ transition:opacity .6s ease; }
+#flash.epic{
+  background:radial-gradient(circle at var(--fx,50%) var(--fy,50%),
+    rgba(255,255,255,.95) 0, rgba(214,160,255,.55) 8%, rgba(160,90,255,.14) 24%, transparent 48%);
+}
+.beam.wide{ width:calc(18 * var(--s)); }
+
+/* ---------- Raridade / novo ---------- */
+.rar{ margin-left:12px; }
+.rar.comum{ color:#8f8aa3; } .rar.rara{ color:#6fb7ff; } .rar.epica{ color:#c27dff; }
+.rar.lendaria{ color:var(--gold); text-shadow:0 0 10px rgba(255,211,77,.5); }
+.orig:empty{ display:none; }
+.orig .new{ color:#7dffb0; animation:twinkle 1.2s steps(2) infinite; }
